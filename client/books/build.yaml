@@ -1,0 +1,31 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        enabled: true
+        options:
+          explicit_to_json: true
+          include_if_null: false
+        generate_for:
+          include:
+            - "**/models/*.dart"
+          exclude:
+            - "**/models/*.*.dart"
+      freezed:
+        enabled: true
+        options:
+          format: false
+        generate_for:
+          include:
+            - "**/models/*.dart"
+            - "**/bloc/*_bloc.dart"
+          exclude:
+            - "**/models/*.*.dart"
+            - "**/bloc/*.*.dart"
+      retrofit:
+        enabled: true
+        generate_for:
+          include:
+            - "**/data/*.dart"
+          exclude:
+            - "**/data/*.*.dart"
