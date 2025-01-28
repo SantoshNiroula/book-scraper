@@ -1,5 +1,7 @@
 .venv
 
 .vscode
+.idea
+.kotlin
 
 __pycache__
