@@ -12,7 +12,7 @@ class BookSpider(scrapy.Spider):
         book_item = BookScraperItem()
         for book in response.css("article.product_pod"):
             image_url = book.css("img::attr(src)").extract_first().replace("..", "")
-            full_image_url = ("https://books.toscrape.com/" + image_url).replace("//", "/")
+            full_image_url = ("https://books.toscrape.com/" + image_url).replace("//", "/").replace(":/", "://")
             book_item["image"] = full_image_url
             book_item["title"] = book.css("h3 > a::attr(title)").extract_first()
             book_item["price"] = book.css("p.price_color::text").get()

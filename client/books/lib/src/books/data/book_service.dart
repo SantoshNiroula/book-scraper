@@ -1,4 +1,5 @@
 import 'package:books/src/books/models/book_model.dart';
+import 'package:books/src/books/models/paginated_book_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -9,9 +10,9 @@ abstract class BookService {
   factory BookService(Dio dio, {String baseUrl}) = _BookService;
 
   @GET('/books')
-  Future<List<BookModel>> getBooks(
+  Future<PaginatedBookModel> getBooks(
     @Query('limit') int limit,
-    @Query('offset') int skip,
+    @Query('skip') int skip,
   );
 
   @GET('/books/{id}')

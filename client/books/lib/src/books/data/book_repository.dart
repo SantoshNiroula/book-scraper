@@ -7,8 +7,9 @@ class BookRepository {
 
   final BookService _service;
 
-  Future<List<BookModel>> getBooks({int skip = 0}) {
-    return _service.getBooks(10, skip);
+  Future<List<BookModel>> getBooks({int skip = 0, int limit = 10}) async {
+    final response = await _service.getBooks(limit, skip);
+    return response.books;
   }
 
   Future<BookModel> getBookById(String id) {

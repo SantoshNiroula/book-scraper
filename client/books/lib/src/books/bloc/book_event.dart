@@ -4,3 +4,5 @@ part of 'book_bloc.dart';
 sealed class BookEvent {}
 
 final class FetchBookEvent extends BookEvent {}
+
+final class FetchMoreBookEvent extends BookEvent {}

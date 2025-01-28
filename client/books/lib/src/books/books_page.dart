@@ -30,14 +30,51 @@ class BooksView extends StatelessWidget {
           BookStateStatus.error => Center(
               child: Text(state.errorMessage ?? ''),
             ),
-          BookStateStatus.loaded => GridView.builder(
-              padding: EdgeInsets.all(16),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-              itemBuilder: (context, index) => BookItem(book: state.books![index]),
-              itemCount: state.books?.length ?? 0,
-            ),
+          BookStateStatus.loaded =>
+            BookListingWidget(books: state.books, onFetchMore: () => context.read<BookBloc>().add(FetchMoreBookEvent())),
         };
       },
+    );
+  }
+}
+
+class BookListingWidget extends StatefulWidget {
+  const BookListingWidget({super.key, this.books, this.onFetchMore});
+  final List<BookModel>? books;
+  final VoidCallback? onFetchMore;
+
+  @override
+  State<BookListingWidget> createState() => _BookListingWidgetState();
+}
+
+class _BookListingWidgetState extends State<BookListingWidget> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+          widget.onFetchMore?.call();
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      controller: _scrollController,
+      padding: EdgeInsets.all(16),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+      itemBuilder: (context, index) => BookItem(book: widget.books![index]),
+      itemCount: widget.books?.length ?? 0,
     );
   }
 }
@@ -49,12 +86,20 @@ class BookItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        children: [
-          CachedNetworkImage(imageUrl: book.image ?? ''),
-          Text(book.title ?? ''),
-          Text(book.price ?? ''),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            CachedNetworkImage(imageUrl: book.image ?? ''),
+            Text(
+              book.title ?? '',
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(book.price ?? ''),
+          ],
+        ),
       ),
     );
   }
