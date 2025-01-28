@@ -33,7 +33,7 @@ fun BookListView(
                     items(state.books){book ->
                         Column {
                             AsyncImage(
-                                model = "http://books.toscrape.com/${book.image}",
+                                model = book.image,
                                 contentDescription = "This is content descriptions",
                                 modifier = Modifier.padding(8.dp)
                             )

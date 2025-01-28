@@ -19,10 +19,16 @@ def read_books(
 	skip: int = 0
 ):
     books = list(collection.find().skip(skip).limit(limit))
+    total = collection.count_documents({})
     for book in books:
         book["id"] = str(book["_id"])
         del book["_id"]
-    return books
+    return {
+        "total" : total,
+        "limit" : limit,
+        "skip" : skip,
+        "books" : books
+    }
 
 @app.get("/books/{book_id}")
 def read_book(book_id: str):

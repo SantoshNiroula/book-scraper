@@ -51,7 +51,7 @@ class BookItem extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          CachedNetworkImage(imageUrl: 'http://books.toscrape.com/${book.image}'),
+          CachedNetworkImage(imageUrl: book.image ?? ''),
           Text(book.title ?? ''),
           Text(book.price ?? ''),
         ],
