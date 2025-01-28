@@ -18,7 +18,11 @@ class BookBloc extends Bloc<BookEvent, BookState> {
 
   Future<void> _onFetch(FetchBookEvent event, Emitter<BookState> emit) async {
     emit(state.copyWith(status: BookStateStatus.loading));
-    final books = await _repository.getBooks();
-    emit(state.copyWith(status: BookStateStatus.loaded, books: books));
+    try {
+      final books = await _repository.getBooks();
+      emit(state.copyWith(status: BookStateStatus.loaded, books: books));
+    } catch (e) {
+      emit(state.copyWith(status: BookStateStatus.error, errorMessage: e.toString()));
+    }
   }
 }
